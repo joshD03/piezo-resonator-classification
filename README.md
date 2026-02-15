@@ -2,15 +2,17 @@
 
 Building a complete ML pipeline from scratch: collecting real sensor data with Arduino, training a classifier, and comparing results to physics theory.
 
+**Josh Das** | BSc MORSE, University of Southampton | February 2026
+
 ---
 
 ## Summary
 
 **What:** ML classifier for vibration positions using real piezoelectric sensor data  
-**Method:** Arduino + piezo disk → 50 samples → 13 features → Random Forest  
+**Method:** Arduino + piezo disk to 50 samples to 13 features to Random Forest  
 **Result:** 67% accuracy (vs 20% baseline) across 5 positions  
 **Finding:** Energy features dominated; physics theory only partially matched experiment  
-**Time:** ~2 weeks (hardware design, data collection, analysis)
+**Time:** About 2 weeks (hardware design, data collection, analysis)
 
 Built independently to understand hardware-to-algorithm workflow end-to-end.
 
@@ -18,7 +20,7 @@ Built independently to understand hardware-to-algorithm workflow end-to-end.
 
 ## Motivation
 
-I wanted to understand the full process of working with real sensor data—from soldering wires to training models. This project collects vibration data from a ruler with a piezo sensor, extracts features, trains a Random Forest classifier, and checks whether the experimental results match what beam theory predicts.
+I wanted to understand the full process of working with real sensor data, from soldering wires to training models. This project collects vibration data from a ruler with a piezo sensor, extracts features, trains a Random Forest classifier, and checks whether the experimental results match what beam theory predicts.
 
 It's basically: "Can I classify where I hit a ruler based on how it vibrates?" Turns out the answer is yes (67% accuracy), but the physics gets more complicated than expected.
 
@@ -39,7 +41,7 @@ Plus I was curious whether classical mechanics could predict what features would
 | Baseline | 20% (random guessing) |
 | Dataset Size | 50 samples (5 classes, 10 samples each) |
 | Most Important Feature | Total Energy (13.3% importance) |
-| Theory Match | Poor (R²=-25) but informative |
+| Theory Match | Poor (R² = -25) but informative |
 | Dominant Frequency | 22.5 Hz (vs 11 Hz predicted) |
 
 **Key Finding:** Energy features outperformed frequency features despite theory suggesting the opposite. The classifier learned what was actually reliable in messy real-world data.
@@ -53,16 +55,22 @@ Plus I was curious whether classical mechanics could predict what features would
 - Arduino Uno (had it lying around)
 - 30cm plastic ruler
 - Desk clamp
-- Electrical tape (for strain relief—learned this the hard way)
+- Electrical tape (for strain relief, learned this the hard way)
 
 ![Hardware Setup](results/hardware_setup.jpg)
-*Actual experimental setup: piezo sensor mounted at 8cm from clamp with tape for strain relief*
+*Actual experimental setup: piezo sensor mounted at 8cm from clamp, with electrical tape for strain relief*
 
 ### How It Works
 
+```
+     Clamp        Sensor              Free End
+       |==============o===================|
+      0cm           8cm                 30cm
+```
+
 The piezo generates voltage when the ruler bends. Arduino reads it (10-bit ADC, so 0-1023 values) at 100 Hz and sends to Python over serial. When you hit the ruler, it vibrates and the sensor picks up the oscillation.
 
-I tried placing the sensor at the free end first but the wire kept disconnecting. Mounting at 8cm was the sweet spot—strong enough signal without too much mechanical stress.
+I tried placing the sensor at the free end first but the wire kept disconnecting. Mounting at 8cm was the sweet spot: strong enough signal without too much mechanical stress.
 
 ---
 
@@ -74,9 +82,9 @@ Hit the ruler at 5 different positions (4cm, 7cm, 10cm, 13cm, 15cm from clamp), 
 Hitting consistently was harder than expected. I used the same pen each time and tried to keep the force similar, but there's definitely variability in the data.
 
 ### Problems Encountered
-1. **Sensor kept disconnecting** at first—fixed by twisting the wires and adding tape as strain relief
-2. **Positions 3 and 4 maxed out the ADC** (both hit 1023 ceiling)—should've added a voltage divider but didn't realize until after collecting all the data
-3. **Ruler broke** halfway through—had to get another one from Tesco at 8pm
+1. **Sensor kept disconnecting** at first, fixed by twisting the wires and adding tape as strain relief
+2. **Positions 3 and 4 maxed out the ADC** (both hit 1023 ceiling), should've added a voltage divider but didn't realize until after collecting all the data
+3. **Ruler broke** halfway through, had to get another one from Tesco at 8pm
 
 This took way longer than planned but taught me a lot about why hardware projects always have "unforeseen challenges."
 
@@ -112,7 +120,7 @@ Baseline (random guessing): 20%
 *Confusion matrix showing Position 0 perfectly classified; Position 2 confused with everything*
 
 ### What Worked
-- Position 0 (near clamp) was perfectly classified—very distinctive low-energy signal
+- Position 0 (near clamp) was perfectly classified, very distinctive low-energy signal
 - Energy features were by far the most important (13.3% importance for total energy)
 - Overall the classifier learned the trend: positions further from clamp have more energy
 
@@ -120,9 +128,9 @@ Baseline (random guessing): 20%
 *Energy features dominated (13.3%); frequency features were less discriminative than expected*
 
 ### What Didn't Work
-- Position 2 (middle) got confused with everything—makes sense since it's a transition zone
+- Position 2 (middle) got confused with everything, makes sense since it's a transition zone
 - Positions 3 and 4 both hit the ADC limit (1023) so the classifier saw them as similar even though they're physically different
-- Frequency features were less useful than expected—probably because striking the ruler excites multiple frequencies at once
+- Frequency features were less useful than expected, probably because striking the ruler excites multiple frequencies at once
 
 ![Sample Signals](results/sample_signals.png)
 *Positions 0-2 show clean oscillations; positions 3-4 look chaotic due to saturation*
@@ -142,7 +150,7 @@ For a cantilever beam, the fundamental frequency is:
 f_1 = \frac{\lambda_1^2}{2\pi L^2} \sqrt{\frac{EI}{\rho A}}
 \]
 
-Plugging in estimates for a plastic ruler (E ≈ 2.5 GPa, 15cm length, 1mm thick), this gives **f₁ ≈ 11 Hz**.
+Plugging in estimates for a plastic ruler (E approximately 2.5 GPa, 15cm length, 1mm thick), this gives **f₁ approximately 11 Hz**.
 
 ### What I Actually Measured
 - Average dominant frequency: **22.5 Hz** (about double!)
@@ -155,11 +163,11 @@ Plugging in estimates for a plastic ruler (E ≈ 2.5 GPa, 15cm length, 1mm thick
 *Amplitude distribution: theory (red line) vs experiment (blue dots). Not a great match but the trend is there.*
 
 ### Why The Mismatch?
-The frequency being 2× higher suggests the ruler was vibrating in higher harmonics, not just the fundamental mode. When you strike something instead of exciting it smoothly, you get a mix of modes.
+The frequency being 2x higher suggests the ruler was vibrating in higher harmonics, not just the fundamental mode. When you strike something instead of exciting it smoothly, you get a mix of modes.
 
 The amplitude mismatch is partly because positions 3-4 saturated the sensor (both appeared as 1023), and partly because the sensor at 8cm measures local strain, not the tip deflection that theory predicts.
 
-**Honestly, I was hoping for better agreement.** But the discrepancy is actually informative—it shows that:
+**Honestly, I was hoping for better agreement.** But the discrepancy is actually informative. It shows that:
 1. Real vibrations are more complex than the simplest theoretical model
 2. The ML classifier still worked because it learned from the data directly
 3. Theoretical intuition (energy should increase toward free end) was still useful for choosing features
@@ -172,13 +180,13 @@ The amplitude mismatch is partly because positions 3-4 saturated the sensor (bot
 ## Discussion
 
 ### Energy vs Frequency for Classification
-I expected frequency to be the primary discriminator (theory predicts different resonant frequencies at each position), but energy features dominated (13.3% vs 6.2% importance). This makes sense in hindsight: impulsive excitation creates multi-modal vibrations with inconsistent frequency content, while energy monotonically increases toward the free end—a more reliable signal for classification.
+I expected frequency to be the primary discriminator (theory predicts different resonant frequencies at each position), but energy features dominated (13.3% vs 6.2% importance). This makes sense in hindsight: impulsive excitation creates multi-modal vibrations with inconsistent frequency content, while energy monotonically increases toward the free end, a more reliable signal for classification.
 
 ### Hardware Limitations and Real-World Constraints
-ADC saturation at positions 3-4 (both maxed at 1023) demonstrates how sensor dynamic range directly impacts classification performance. In practical applications, this would require either voltage scaling or logarithmic ADCs—relevant to MEMS sensor design where area/power constraints limit resolution.
+ADC saturation at positions 3-4 (both maxed at 1023) demonstrates how sensor dynamic range directly impacts classification performance. In practical applications, this would require either voltage scaling or logarithmic ADCs, relevant to MEMS sensor design where area/power constraints limit resolution.
 
 ### Theory-Experiment Gap
-The poor match to Euler-Bernoulli theory (103% frequency error, R²=-25 amplitude fit) isn't a failure of the experiment—it reveals that real mechanical systems exhibit:
+The poor match to Euler-Bernoulli theory (103% frequency error, R² = -25 amplitude fit) isn't a failure of the experiment. It reveals that real mechanical systems exhibit:
 - Multi-modal vibrations from impulsive excitation
 - Non-ideal boundary conditions (clamp compliance)
 - Sensor placement effects (local strain vs tip displacement)
@@ -186,7 +194,7 @@ The poor match to Euler-Bernoulli theory (103% frequency error, R²=-25 amplitud
 The ML approach succeeded precisely because it didn't assume theoretical ideality.
 
 ### Unexpected Finding
-Looking back at the signals, this makes sense—frequency varies chaotically between trials, but energy consistently increases toward the free end. The classifier learned what was actually reliable in the data, not what the textbook predicted would matter.
+Looking back at the signals, this makes sense: frequency varies chaotically between trials, but energy consistently increases toward the free end. The classifier learned what was actually reliable in the data, not what the textbook predicted would matter.
 
 ---
 
@@ -224,7 +232,7 @@ piezo-vibration-classifier/
 │   └── validate_physics.py        # Euler-Bernoulli comparison
 ├── data/
 │   ├── raw/                       # 50 .npy files (sensor readings)
-│   └── features/                  # Processed 50×13 feature matrix
+│   └── features/                  # Processed 50x13 feature matrix
 ├── models/                        # Trained .pkl + test predictions
 └── results/                       # Generated visualizations
 ```
@@ -295,6 +303,6 @@ See `requirements.txt` for specific versions.
 
 ## License
 
-MIT—use however you want.
+MIT, use however you want.
 
 
