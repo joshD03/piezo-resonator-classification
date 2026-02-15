@@ -1,0 +1,13 @@
+mean
+std
+max
+min
+peak_to_peak
+rms
+energy
+dominant_frequency
+dominant_magnitude
+spectral_centroid
+total_spectral_power
+mean_magnitude
+std_magnitude
