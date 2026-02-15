@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.pyc
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+virtualenv/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Operating System
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Data files (uncomment to track large data files)
+# If you want to commit your data to GitHub, comment these out
+data/raw/*.npy
+data/features/*.npy
+
+# Model files (can be large)
+models/*.pkl
+models/*.npy
+
+# Results (generated plots and animations)
+results/*.png
+results/*.gif
+results/*.pdf
+results/*.jpg
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+
+# Arduino build files
+arduino/.build/
+arduino/.cache/
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
