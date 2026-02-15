@@ -170,9 +170,6 @@ Using rough parameters for a plastic ruler (E about 2.5 GPa, length 15 cm, thick
 * Average dominant frequency: **22.5 Hz**
 * Amplitude pattern versus the simplest model: **R² = minus 25** (worse than predicting the mean)
 
-![Theoretical Prediction](results/theoretical_prediction.png)  
-*Illustration of the simple model behaviour. Reality is not this clean.*
-
 ![Physics Validation](results/physics_validation.png)  
 *Amplitude distribution: theory versus experiment. The fit is poor, but there is still a broad trend.*
 
