@@ -45,12 +45,6 @@ data/features/*.npy
 models/*.pkl
 models/*.npy
 
-# Results (generated plots and animations)
-results/*.png
-results/*.gif
-results/*.pdf
-results/*.jpg
-
 # Logs
 *.log
 
