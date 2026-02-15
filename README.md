@@ -2,7 +2,10 @@
 
 Building a complete ML pipeline from scratch: collecting real sensor data with Arduino, training a classifier, and comparing results to physics theory.
 
-**Josh Das** | BSc MORSE, University of Southampton | February 2026
+---
+
+![Theoretical Vibration](results/theoretical_vibration.gif)
+*What theory predicts vs what I actually measured: ML classifier achieved 67% accuracy despite physics being messier than expected*
 
 ---
 
@@ -61,12 +64,6 @@ Plus I was curious whether classical mechanics could predict what features would
 *Actual experimental setup: piezo sensor mounted at 8cm from clamp, with electrical tape for strain relief*
 
 ### How It Works
-
-```
-     Clamp        Sensor              Free End
-       |==============o===================|
-      0cm           8cm                 30cm
-```
 
 The piezo generates voltage when the ruler bends. Arduino reads it (10-bit ADC, so 0-1023 values) at 100 Hz and sends to Python over serial. When you hit the ruler, it vibrates and the sensor picks up the oscillation.
 
@@ -304,5 +301,4 @@ See `requirements.txt` for specific versions.
 ## License
 
 MIT, use however you want.
-
 
